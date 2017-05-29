@@ -15,6 +15,8 @@ Description :	abstrat class define the object on system WIn32
 #include <wchar.h>
 #include <time.h>
 #include <assert.h>
+#include <iostream>
+#include <iomanip>
 //use list define instead of STL container
 #include "Utility/RKList.h"
 #include "Utility/Utils.h"
@@ -50,6 +52,8 @@ namespace DoAn
 		time_t		_getDateCreate() { return  _data_win32->ftCreationTime.dwHighDateTime; } //return at format time_t
 		time_t		_getDateModifed() { return _data_win32->ftLastWriteTime.dwHighDateTime; } // return at format time_t
 	public:
+		static WIN32_FIND_DATA	* cloneData(WIN32_FIND_DATA data);
+
 		ccObjectSystem();
 		virtual ~ccObjectSystem();
 
@@ -58,8 +62,26 @@ namespace DoAn
 		virtual	u64	   getSize() = 0;
 
 		//get and set method
+
 		std::string getDateCreate(); //return at format string
 		std::string getDateModified(); //return at format string
+
+		//add child
+		void addChild(ccObjectSystem * child);
+
+		//set parent
+		void setParent(ccObjectSystem * parent);
+
+		//print
+		virtual void print(int num);
+		void printSubChild(int num = 0);
+		void printAllChild(int num = 0);
+	protected:
+		void printDate(const SYSTEMTIME & st);
+		void printDateCreate();
+		void printDateModifed();
+
+		std::wstring getMonth(WORD m);
 
 
 	};

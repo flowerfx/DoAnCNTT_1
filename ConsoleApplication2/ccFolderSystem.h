@@ -7,10 +7,10 @@ namespace DoAn
 	class ccFolderSystem : public ccObjectSystem
 	{
 	public:
-		static ccFolderSystem * GetFolder(const std::wstring & path);
+		static ccFolderSystem * GetFolder(const std::wstring & path, const std::wstring & name);
 
 		ccFolderSystem();
-		ccFolderSystem(const std::wstring & path);
+		ccFolderSystem(const std::wstring & path, const std::wstring & name);
 		virtual ~ccFolderSystem();
 
 		virtual int init()		override;

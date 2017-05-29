@@ -13,7 +13,9 @@ int main()
 	fputws(L"Input the first path: ", stdout);
 	wscanf(L"%ls", str_path.c_str());
 
-	auto pd = new DoAn::ccFolderSystem(str_path);
+	auto pd = new DoAn::ccFolderSystem(str_path, str_path);
+
+	pd->printAllChild();
     return 0;
 }
 
