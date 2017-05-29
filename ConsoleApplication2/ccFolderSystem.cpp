@@ -83,31 +83,74 @@ namespace DoAn
 		return 1;
 	}
 
-	ccObjectSystem* ccFolderSystem::findChildByPath(const std::wstring & path)
-	{
-		ccObjectSystem* res = nullptr;
-
-		return res;
-	}
-
-	extension::RKList<ccObjectSystem*> ccFolderSystem::findListChildInPath(const std::wstring & path)
+	extension::RKList<ccObjectSystem*> ccFolderSystem::searchFile(const std::wstring & name, bool exactly)
 	{
 		extension::RKList<ccObjectSystem*> res;
-
+		for (int i = 0; i < _child.Size(); i++)
+		{
+			auto c = _child[i];
+			if (c->getType() == TYPE_SYSTEM::T_FILE)
+			{
+				auto exname = c->getName();
+				if (!exactly)
+				{
+					std::size_t found = exname.find(name);
+					if (found != std::wstring::npos)
+					{
+						res.Insert(c, res.Size());
+					}
+				}
+				else
+				{
+					if (exname == name)
+					{
+						res.Insert(c, res.Size());
+					}
+				}
+			}
+			else
+			{
+				auto res_child = static_cast<ccFolderSystem*>(c)->searchFile(name, exactly);
+				for (int j = 0; j < res_child.Size(); j++)
+				{
+					res.Insert(res_child[j], res.Size());
+				}
+			}
+		}
 		return res;
 	}
-
-	extension::RKList<ccObjectSystem*> ccFolderSystem::findChildByName(const std::wstring & name)
+	//list folder by size
+	extension::RKList<ccObjectSystem*> ccFolderSystem::listFolder(u64 size_begin, u64 size_end)
 	{
 		extension::RKList<ccObjectSystem*> res;
+		for (int i = 0; i < _child.Size(); i++)
+		{
+			auto c = _child[i];
+			if (c->getType() == TYPE_SYSTEM::T_FOLDER)
+			{
+				u64 size_folder = c->getSize();
+				if (size_end == 0)
+				{
+					if (size_begin == size_folder) //exactly 
+					{
+						res.Insert(c, res.Size());
+					}
+				}
+				else
+				{
+					if(size_folder <= size_end && size_folder >= size_begin)
+					{
+						res.Insert(c, res.Size());
+					}
+				}
 
-		return res;
-	}
-
-	extension::RKList<ccObjectSystem*> ccFolderSystem::findChildByExtension(const std::wstring & ex)
-	{
-		extension::RKList<ccObjectSystem*> res;
-
+				auto res_child = static_cast<ccFolderSystem*>(c)->listFolder(size_begin, size_end);
+				for (int j = 0; j < res_child.Size(); j++)
+				{
+					res.Insert(res_child[j], res.Size());
+				}
+			}
+		}
 		return res;
 	}
 }

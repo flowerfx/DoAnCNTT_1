@@ -19,12 +19,11 @@ namespace DoAn
 		size_t getNumberChild();
 		size_t getNumberChildSub();
 
-		ccObjectSystem* findChildByPath(const std::wstring & path);
-		extension::RKList<ccObjectSystem*> findListChildInPath(const std::wstring & path);
-		extension::RKList<ccObjectSystem*> findChildByName(const std::wstring & name);
-		extension::RKList<ccObjectSystem*> findChildByExtension(const std::wstring & ex);
-
-
+		//search files and folder
+		extension::RKList<ccObjectSystem*> searchFile(const std::wstring & name, bool exactly);
+		//list folder by size
+		extension::RKList<ccObjectSystem*> listFolder(u64 size_begin, u64 size_end = 0);
+		
 	};
 }
 

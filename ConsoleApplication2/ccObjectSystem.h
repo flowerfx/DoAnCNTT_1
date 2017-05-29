@@ -62,7 +62,9 @@ namespace DoAn
 		virtual	u64	   getSize() = 0;
 
 		//get and set method
-
+		TYPE_SYSTEM getType() { return _type; }
+		const std::wstring getName() { return _name; }
+		const std::wstring getPath() { return _path_in_win; }
 		std::string getDateCreate(); //return at format string
 		std::string getDateModified(); //return at format string
 
@@ -76,6 +78,12 @@ namespace DoAn
 		virtual void print(int num);
 		void printSubChild(int num = 0);
 		void printAllChild(int num = 0);
+
+		// sort
+		void sortChildAsModifedDate(int state);
+		void sortChildAsCreateDate(int state);
+		void sortChildAsSize(int state);
+
 	protected:
 		void printDate(const SYSTEMTIME & st);
 		void printDateCreate();

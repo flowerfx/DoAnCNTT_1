@@ -79,7 +79,7 @@ namespace DoAn
 
 	void ccObjectSystem::printDate(const SYSTEMTIME & st)
 	{
-		std::wcout << st.wHour << L":" << st.wMinute << L" "<< getMonth(st.wMonth) << L"/" << st.wDay << L"/" << st.wYear;
+		std::wcout << st.wHour << L":" << st.wMinute << L" " << getMonth(st.wMonth) << L"/" << st.wDay << L"/" << st.wYear;
 	}
 
 	void ccObjectSystem::printDateCreate()
@@ -127,6 +127,121 @@ namespace DoAn
 		for (int i = 0; i < _child.Size(); i++)
 		{
 			_child[i]->printAllChild(num + 1);
+		}
+	}
+
+	void ccObjectSystem::sortChildAsModifedDate(int state)
+	{
+		if (_child.Size() > 0)
+		{
+			_child.StableSort([state](void * pA, void *pB) -> bool
+			{
+				ccObjectSystem * iA = reinterpret_cast<ccObjectSystem*>(pA);
+				ccObjectSystem * iB = reinterpret_cast<ccObjectSystem*>(pB);
+
+				if (iA->_type != iB->_type /*TYPE_SYSTEM::T_FOLDER*/)
+				{
+					if (state == 0)
+					{
+						return  iA->_type == TYPE_SYSTEM::T_FOLDER ? true : false;
+					}
+					else
+					{
+						return  iA->_type == TYPE_SYSTEM::T_FOLDER ? false : true;
+					}
+				}
+				else
+				{
+					if (state == 0)
+					{
+						return iA->_getDateModifed() > iB->_getDateModifed();
+					}
+					else
+					{
+						return iA->_getDateModifed() < iB->_getDateModifed();
+					}
+				}
+			});
+			for (int i = 0; i < _child.Size(); i++)
+			{
+				_child[i]->sortChildAsModifedDate(state);
+			}
+		}
+	}
+	void ccObjectSystem::sortChildAsCreateDate(int state)
+	{
+		if (_child.Size() > 0)
+		{
+			_child.StableSort([state](void * pA, void *pB) -> bool
+			{
+				ccObjectSystem * iA = reinterpret_cast<ccObjectSystem*>(pA);
+				ccObjectSystem * iB = reinterpret_cast<ccObjectSystem*>(pB);
+
+				if (iA->_type != iB->_type /*TYPE_SYSTEM::T_FOLDER*/)
+				{
+					if (state == 0)
+					{
+						return  iA->_type == TYPE_SYSTEM::T_FOLDER ? true : false;
+					}
+					else
+					{
+						return  iA->_type == TYPE_SYSTEM::T_FOLDER ? false : true;
+					}
+				}
+				else
+				{
+					if (state == 0)
+					{
+						return iA->_getDateCreate() > iB->_getDateCreate();
+					}
+					else
+					{
+						return iA->_getDateCreate() < iB->_getDateCreate();
+					}
+				}
+			});
+			for (int i = 0; i < _child.Size(); i++)
+			{
+				_child[i]->sortChildAsCreateDate(state);
+			}
+		}
+	}
+	void ccObjectSystem::sortChildAsSize(int state)
+	{
+		if (_child.Size() > 0)
+		{
+			_child.StableSort([state](void * pA, void *pB) -> bool
+			{
+				ccObjectSystem * iA = reinterpret_cast<ccObjectSystem*>(pA);
+				ccObjectSystem * iB = reinterpret_cast<ccObjectSystem*>(pB);
+
+				if (iA->_type != iB->_type /*TYPE_SYSTEM::T_FOLDER*/)
+				{
+					if (state == 0)
+					{
+						return  iA->_type == TYPE_SYSTEM::T_FOLDER ? true : false;
+					}
+					else
+					{
+						return  iA->_type == TYPE_SYSTEM::T_FOLDER ? false : true;
+					}
+				}
+				else
+				{
+					if (state == 0)
+					{
+						return iA->getSize() > iB->getSize();
+					}
+					else
+					{
+						return iA->getSize() < iB->getSize();
+					}
+				}
+			});
+			for (int i = 0; i < _child.Size(); i++)
+			{
+				_child[i]->sortChildAsSize(state);
+			}
 		}
 	}
 }
